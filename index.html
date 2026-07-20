@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InvoiceKilat — Generator Invoice & Estimasi Pajak Gratis</title>
+<meta name="description" content="Buat invoice profesional dan hitung estimasi pajak gratis, tanpa login. Export PDF langsung dari browser.">
+<style>
+:root{--bg:#0f1220;--card:#1a1f35;--acc:#5b8cff;--ok:#2ecc71;--txt:#e8ecff;--mut:#9aa3c7}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt);line-height:1.5;padding:16px}
+.wrap{max-width:920px;margin:0 auto}
+h1{font-size:1.6rem;margin-bottom:4px}
+.sub{color:var(--mut);margin-bottom:18px;font-size:.9rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:680px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:12px;padding:16px}
+label{display:block;font-size:.8rem;color:var(--mut);margin:10px 0 4px}
+input,select{width:100%;padding:9px 10px;border-radius:8px;border:1px solid #2c3454;background:#0c0f1c;color:var(--txt);font-size:.95rem}
+button{margin-top:16px;background:var(--acc);color:#fff;border:0;padding:11px 16px;border-radius:9px;font-size:.95rem;cursor:pointer;font-weight:600}
+button.ghost{background:#2c3454}
+.row{display:flex;gap:8px;align-items:flex-end}
+.row>*{flex:1}
+.preview{margin-top:18px;background:#fff;color:#111;padding:22px;border-radius:10px}
+.preview h2{color:#111;font-size:1.2rem;margin-bottom:10px}
+.inv-meta{font-size:.85rem;color:#333}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.85rem}
+th,td{border-bottom:1px solid #ddd;padding:6px;text-align:left}
+.th-r,td.r{text-align:right}
+.tax{margin-top:12px;font-weight:700}
+.aff{margin-top:22px;background:#141a2e;border:1px dashed #2c3454;border-radius:10px;padding:14px;font-size:.85rem;color:var(--mut)}
+.aff a{color:var(--acc);text-decoration:none}
+footer{margin-top:26px;text-align:center;color:var(--mut);font-size:.78rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>InvoiceKilat</h1>
+<div class="sub">Generator invoice profesional + estimasi pajak. Gratis, tanpa login. Export PDF via browser.</div>
+
+<div class="grid">
+  <div class="card">
+    <label>Pengirim (Nama/Usaha)</label>
+    <input id="from" value="Nama Usaha Anda">
+    <label>Penerima (Klien)</label>
+    <input id="to" value="Nama Klien">
+    <label>No. Invoice</label>
+    <input id="no" value="INV-001">
+    <label>Tanggal</label>
+    <input id="date" type="date">
+  </div>
+  <div class="card">
+    <label>Item (nama,jumlah,harga — 1 per baris)</label>
+    <textarea id="items" rows="6" style="width:100%;padding:9px;background:#0c0f1c;color:var(--txt);border:1px solid #2c3454;border-radius:8px;font-family:monospace">Desain logo,1,500000
+Landing page,1,1500000
+Maintenance,1,300000</textarea>
+    <label>Tarif Pajak (%)</label>
+    <input id="tax" type="number" value="11">
+  </div>
+</div>
+
+<button onclick="gen()">Buat Preview & Hitung</button>
+<button class="ghost" onclick="window.print()">Export PDF</button>
+
+<div class="preview" id="preview" style="display:none"></div>
+
+<div class="aff">
+  💡 <b>Tools rekomendasi (affiliate):</b>
+  Butuh domain murah? <a href="https://www.namecheap.com/?aff=12345">Namecheap</a> ·
+  Hosting cepat? <a href="https://www.hostinger.com/?ref=invoicekilat">Hostinger</a> ·
+  Bayar online? <a href="https://stripe.com/">Stripe</a>
+</div>
+
+<footer>InvoiceKilat — alat gratis oleh Konteng. Tanpa modal, tanpa login.</footer>
+</div>
+
+<script>
+function fmt(n){return 'Rp '+Math.round(n).toLocaleString('id-ID');}
+function gen(){
+  const from=document.getElementById('from').value;
+  const to=document.getElementById('to').value;
+  const no=document.getElementById('no').value;
+  const date=document.getElementById('date').value||new Date().toISOString().slice(0,10);
+  const tax=parseFloat(document.getElementById('tax').value)||0;
+  let rows='',sub=0;
+  document.getElementById('items').value.split('\n').forEach(l=>{
+    const p=l.split(',');
+    if(p.length<3)return;
+    const name=p[0].trim(),qty=parseFloat(p[1])||0,price=parseFloat(p[2])||0;
+    const tot=qty*price;sub+=tot;
+    rows+=`<tr><td>${name}</td><td class="r">${qty}</td><td class="r">${fmt(price)}</td><td class="r">${fmt(tot)}</td></tr>`;
+  });
+  const taxAmt=sub*tax/100, total=sub+taxAmt;
+  document.getElementById('preview').style.display='block';
+  document.getElementById('preview').innerHTML=`
+    <h2>${from}</h2>
+    <div class="inv-meta">Kepada: <b>${to}</b><br>No: ${no} · Tgl: ${date}</div>
+    <table><tr><th>Item</th><th class="th-r">Qty</th><th class="th-r">Harga</th><th class="th-r">Total</th></tr>${rows}</table>
+    <div class="tax">Subtotal: ${fmt(sub)}<br>Pajak ${tax}%: ${fmt(taxAmt)}<br>Total: ${fmt(total)}</div>`;
+}
+document.getElementById('date').value=new Date().toISOString().slice(0,10);
+</script>
+</body>
+</html>
