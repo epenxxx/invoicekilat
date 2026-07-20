@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://epenxxx.github.io/invoicekilat/sitemap.xml

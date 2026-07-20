@@ -1,15 +1,27 @@
-# InvoiceKilat — Passive Income Tool (tanpa modal)
+# InvoiceKilat 🧾
 
-Generator invoice + estimasi pajak gratis, static HTML, tanpa backend.
-Monetisasi: affiliate links + organic SEO traffic.
+Generator invoice profesional + estimasi pajak **gratis, tanpa login, tanpa modal**.
+Export PDF langsung dari browser. Static HTML — cepat, privasi aman (data tidak dikirim ke server).
 
-## Deploy gratis (GitHub Pages)
-1. Buat repo di github.com (gratis)
-2. `git remote add origin git@github.com:USER/REPO.git`
-3. `git add . && git commit -m "init" && git push -u origin main`
-4. Settings > Pages > source: main / root
+🔗 **Live:** https://epenxxx.github.io/invoicekilat/
 
-## Cara dapet cuan
-- Traffic organik dari SEO (keyword: "buat invoice gratis", "hitung pajak")
-- Affiliate: ganti link di index.html dengan ID referral Boss
-- Bisa di-clone jadi banyak tool niche (nota, kwitansi, dll)
+## Fitur
+- Buat invoice dengan多条 item, otomatis hitung subtotal
+- Estimasi pajak (PPh/PPN) dengan tarif bebas
+- Export ke PDF via browser print
+- 100% client-side, tidak butuh backend
+
+## Untuk siapa?
+Freelancer, UMKM, dan siapa saja yang butuh invoice cepat tanpa langganan mahal.
+
+## Monetisasi
+Tool ini gratis. Dukungan lewat affiliate:
+- Domain murah: Namecheap
+- Hosting: Hostinger
+- Pembayaran online: Stripe
+
+## Deploy sendiri (gratis)
+Clone repo ini, enable GitHub Pages di settings. Selesai.
+
+---
+Dibuat oleh Konteng — bagian dari portfolio pasif income tanpa modal.
