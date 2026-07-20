@@ -19,13 +19,22 @@ h1{font-size:3.5rem;font-weight:800;background:linear-gradient(to bottom right,#
 label{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
 input,textarea{width:100%;background:rgba(2,6,23,.8);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--txt)}
 .btn-primary{background:var(--acc);color:#fff;padding:14px;border-radius:14px;font-weight:700;border:none;cursor:pointer;width:100%}
-.preview{margin-top:40px;background:#fff;color:#0f172a;border-radius:32px;padding:40px;display:none}
+.preview{margin-top:40px;background:#fff;color:#0f172a;border-radius:8px;padding:60px;display:none;font-family:"Inter",sans-serif;max-width:800px;margin-left:auto;margin-right:auto;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.inv-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #0f172a;padding-bottom:30px}
+.inv-brand{font-size:1.8rem;font-weight:800;letter-spacing:-.03em}
+.inv-meta{text-align:right;font-size:.8rem;color:#64748b}
+.inv-meta b{color:#0f172a;font-size:1rem}
+.inv-to{margin:30px 0;font-size:.9rem;color:#64748b}
+.inv-to b{color:#0f172a;font-size:1.1rem;display:block;margin-top:5px}
 table{width:100%;border-collapse:collapse;margin:30px 0}
-th{text-align:left;color:#94a3b8;font-size:.7rem;text-transform:uppercase;padding-bottom:12px;border-bottom:1px solid #f1f5f9}
-td{padding:16px 0;border-bottom:1px solid #f8fafc}
+th{text-align:left;color:#94a3b8;font-size:.7rem;text-transform:uppercase;padding-bottom:12px;border-bottom:1px solid #e2e8f0}
+td{padding:16px 0;border-bottom:1px solid #f1f5f9;font-size:.9rem}
 .r{text-align:right}
-.total-val{font-size:2rem;font-weight:900;color:var(--acc)}
-.aff-item{background:rgba(30,41,59,.2);border:1px solid var(--border);border-radius:20px;padding:20px;text-align:center;text-decoration:none;display:block}
+.inv-total{margin-top:20px;display:flex;justify-content:flex-end}
+.inv-total-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:20px 30px;text-align:right;min-width:280px}
+.inv-total-box .line{display:flex;justify-content:space-between;font-size:.85rem;color:#64748b;margin:5px 0}
+.inv-total-box .grand{font-size:1.6rem;font-weight:800;color:#0f172a;margin-top:10px;border-top:1px solid #e2e8f0;padding-top:10px}
+.aff-item{background:rgba(30,41,59,.2);border:1px solid var(--border);border-radius:20px;padding:20px;text-align:center;text-decoration:none;display:block;color:var(--txt)}
 footer{margin-top:80px;text-align:center;color:var(--mut);font-size:.8rem}
 </style>
 </head>
@@ -33,38 +42,30 @@ footer{margin-top:80px;text-align:center;color:var(--mut);font-size:.8rem}
 <div class="wrap">
   <header><h1>InvoiceKilat</h1><p style="color:var(--mut)">Professional, Private, Free.</p></header>
   <div class="bento">
-    <div class="card span-2">
-      <label>Identity</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
-        <input id="from" value="Nama Usaha Anda"><input id="to" value="Nama Klien">
-      </div>
+    <div class="card span-2"><label>Identity</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px"><input id="from" value="Nama Usaha Anda"><input id="to" value="Nama Klien"></div>
     </div>
     <div class="card"><label>Tax (%)</label><input id="tax" type="number" value="11"><button class="btn-primary" onclick="gen()" style="margin-top:15px">Generate</button></div>
     <div class="card span-2"><label>Items (Name, Qty, Price)</label><textarea id="items" rows="4">Design, 1, 2000000</textarea></div>
-    <div class="card" style="text-align:center">🚀<br><b>Ready</b></div>
+    <div class="card" style="text-align:center">Ready</div>
   </div>
   <div class="preview" id="preview"></div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:50px">
-    <a href="#" class="aff-item"><span>Domain</span><br><strong style="color:white">Namecheap</strong></a>
-    <a href="#" class="aff-item"><span>Hosting</span><br><strong style="color:white">Hostinger</strong></a>
-    <a href="#" class="aff-item"><span>Payments</span><br><strong style="color:white">Stripe</strong></a>
+    <a href="#" class="aff-item"><span>Domain</span><br><strong>Namecheap</strong></a>
+    <a href="#" class="aff-item"><span>Hosting</span><br><strong>Hostinger</strong></a>
+    <a href="#" class="aff-item"><span>Payments</span><br><strong>Stripe</strong></a>
   </div>
   <footer>&copy; 2026 InvoiceKilat</footer>
 </div>
 <script>
 function fmt(n){return "Rp "+Math.round(n).toLocaleString("id-ID")}
 function gen(){
-  const from=document.getElementById("from").value, to=document.getElementById("to").value, tax=parseFloat(document.getElementById("tax").value)||0;
+  const from=document.getElementById("from").value,to=document.getElementById("to").value,tax=parseFloat(document.getElementById("tax").value)||0;
   let rows="",sub=0;
-  document.getElementById("items").value.split("\n").forEach(l=>{
-    const p=l.split(","); if(p.length<3)return;
-    const name=p[0].trim(),qty=parseFloat(p[1])||0,price=parseFloat(p[2])||0;
-    const tot=qty*price;sub+=tot;
-    rows+=`<tr><td>${name}</td><td class="r">${qty}</td><td class="r">${fmt(price)}</td><td class="r">${fmt(tot)}</td></tr>`;
-  });
-  const taxAmt=sub*tax/100, total=sub+taxAmt;
-  const p=document.getElementById("preview"); p.style.display="block";
-  p.innerHTML=`<h2>${from}</h2><p>Billed to: ${to}</p><table><thead><tr><th>Item</th><th class="r">Qty</th><th class="r">Rate</th><th class="r">Total</th></tr></thead><tbody>${rows}</tbody></table><div class="r"><p>Subtotal: ${fmt(sub)}</p><p>Tax: ${fmt(taxAmt)}</p><div class="total-val">${fmt(total)}</div></div>`;
+  document.getElementById("items").value.split("\n").forEach(l=>{const p=l.split(",");if(p.length<3)return;const name=p[0].trim(),qty=parseFloat(p[1])||0,price=parseFloat(p[2])||0;const tot=qty*price;sub+=tot;rows+=`<tr><td>${name}</td><td class="r">${qty}</td><td class="r">${fmt(price)}</td><td class="r">${fmt(tot)}</td></tr>`;});
+  const taxAmt=sub*tax/100,total=sub+taxAmt;
+  const p=document.getElementById("preview");p.style.display="block";
+  p.innerHTML=`<div class="inv-head"><div class="inv-brand">${from}</div><div class="inv-meta"><b>INVOICE</b><br>No: INV-001<br>Tanggal: ${new Date().toISOString().slice(0,10)}</div></div><div class="inv-to">TAGIHAN KEPADA:<b>${to}</b></div><table><thead><tr><th>Deskripsi</th><th class="r">Qty</th><th class="r">Harga</th><th class="r">Total</th></tr></thead><tbody>${rows}</tbody></table><div class="inv-total"><div class="inv-total-box"><div class="line"><span>Subtotal</span><span>${fmt(sub)}</span></div><div class="line"><span>Pajak (${tax}%)</span><span>${fmt(taxAmt)}</span></div><div class="grand">${fmt(total)}</div></div></div>`;
   p.scrollIntoView({behavior:"smooth"});
 }
 </script>
